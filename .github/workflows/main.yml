@@ -47,7 +47,7 @@ jobs:
           POSTGRES_PASSWORD: ""
 #          PGPORT: ${{ job.services.postgres.ports[5432] }}
 #          RAILS_ENV: test
-        run: rails db:setup
+        run: rails db:create
 
       - name: Run rspec tests
         run: rspec
