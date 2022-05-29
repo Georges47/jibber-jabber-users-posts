@@ -42,7 +42,7 @@ jobs:
 
       - name: Setup database
         env:
-          PGHOST: postgres
+          PGHOST: localhost
           PGUSER: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
