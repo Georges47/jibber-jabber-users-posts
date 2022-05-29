@@ -48,7 +48,7 @@ jobs:
 #          PGPORT: ${{ job.services.postgres.ports[5432] }}
 #          RAILS_ENV: test
         run: |
-          cp config/database.github.yml.yml config/database.yml
+          cp config/database.github.yml config/database.yml
           rails db:create
 
       - name: Run rspec tests
