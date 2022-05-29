@@ -31,8 +31,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install library for postgres
-        run: apt-get install libpq-dev
+#      - name: Install library for postgres
+#        run: apt-get install libpq-dev
 
       - name: Install dependencies
         run: bundle install
@@ -45,8 +45,8 @@ jobs:
           PGHOST: postgres
           PGUSER: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
-          RAILS_ENV: test
-        run: rails db:create
+#          RAILS_ENV: test
+        run: rails db:setup
 
       - name: Run rspec tests
         run: rspec
