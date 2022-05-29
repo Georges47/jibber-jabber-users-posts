@@ -16,18 +16,34 @@ jobs:
     container:
       image: ruby:3.0.4
 
+    services:
+      postgres:
+        image: postgres:10.8
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ""
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     steps:
       - uses: actions/checkout@v3
-#      - name: Set up Ruby
-#        uses: ruby/setup-ruby@v1
-#        with:
-#          ruby-version: '3.0.4'
-#        env:
-#          ImageOS: ubuntu20
+
       - name: Install dependencies
         run: bundle install
+
+      - name: Setup database
+        env:
+          PGHOST: postgres
+          PGUSER: postgres
+          PGPORT: ${{ job.services.postgres.ports[5432] }}
+          RAILS_ENV: test
+        run: rails db:create db:schema:load
+
       - name: Run rspec tests
-        run: bundle exec rspec
+        run: rspec
   cd:
     runs-on: ubuntu-20.04
     needs: ci
