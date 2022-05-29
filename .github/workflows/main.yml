@@ -13,16 +13,17 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-20.04
-    container: ruby:3.0
+    container:
+      image: ruby:3.0.4
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.0'
-        env:
-          ImageOS: ubuntu20
+#      - name: Set up Ruby
+#        uses: ruby/setup-ruby@v1
+#        with:
+#          ruby-version: '3.0.4'
+#        env:
+#          ImageOS: ubuntu20
       - name: Install dependencies
         run: bundle install
       - name: Run rspec tests

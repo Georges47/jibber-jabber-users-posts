@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 #1 This is the official Ruby image (https://hub.docker.com/_/ruby) - a complete Linux system with Ruby installed
-FROM ruby:3.0
+FROM ruby:3.0.4
 
 #2 Install applications needed for building Rails app
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
