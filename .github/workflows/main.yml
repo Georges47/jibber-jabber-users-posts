@@ -42,11 +42,10 @@ jobs:
 
       - name: Setup database
         env:
-#          POSTGRES_HOST: localhost
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ""
-#          PGPORT: ${{ job.services.postgres.ports[5432] }}
-#          RAILS_ENV: test
+          PGHOST: postgres
+          PGUSER: postgres
+          PGPORT: ${{ job.services.postgres.ports[5432] }}
+          RAILS_ENV: test
         run: |
           cp config/database.github.yml config/database.yml
           rails db:create
