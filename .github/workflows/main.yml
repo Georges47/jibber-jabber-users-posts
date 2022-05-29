@@ -42,7 +42,7 @@ jobs:
 
       - name: Setup database
         env:
-          POSTGRES_HOST: localhost
+#          POSTGRES_HOST: localhost
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: ""
 #          PGPORT: ${{ job.services.postgres.ports[5432] }}
