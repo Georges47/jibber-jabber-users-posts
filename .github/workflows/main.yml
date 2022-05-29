@@ -1,4 +1,4 @@
-name: Backend CI/CD
+name: CI/CD
 
 on:
   push:
@@ -13,14 +13,17 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-20.04
-    container: ruby:3.0
+    container:
+      image: ruby:3.0.4
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
-        with:
-          ruby-version: '3.0.4'
+#      - name: Set up Ruby
+#        uses: ruby/setup-ruby@v1
+#        with:
+#          ruby-version: '3.0.4'
+#        env:
+#          ImageOS: ubuntu20
       - name: Install dependencies
         run: bundle install
       - name: Run rspec tests
