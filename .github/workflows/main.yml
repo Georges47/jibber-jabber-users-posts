@@ -1,0 +1,45 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  ci:
+    runs-on: ubuntu-20.04
+    container: ruby:3.0
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
+        with:
+          ruby-version: '3.0.4'
+      - name: Install dependencies
+        run: bundle install
+      - name: Run rspec tests
+        run: bundle exec rspec
+  cd:
+    runs-on: ubuntu-20.04
+    needs: ci
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Docker login
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build
+        run: docker build -t jibber-jabber-posts .
+      - name: Tags
+        run: |
+          docker tag jibber-jabber-posts ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.sha }}
+          docker tag jibber-jabber-posts ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:latest
+      - name: Push
+        run: |
+          docker push ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:latest
