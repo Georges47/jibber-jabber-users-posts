@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
-  root 'posts#index'
-  resources :posts
+
+  get '/', to: 'posts#index'
+  get '/:id', to: 'posts#show'
+  post '/', to: 'posts#create'
+  post '/:id/reply', to: 'posts#reply'
+
 end

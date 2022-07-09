@@ -10,15 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_29_020143) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_09_015009) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "posts", force: :cascade do |t|
-    t.string "creator_id"
     t.text "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.bigint "replied_post_id"
+    t.index ["replied_post_id"], name: "index_posts_on_replied_post_id"
+    t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "avatar", default: "/generic-avatar.jpg"
+    t.string "display_name"
+    t.string "username"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "keycloak_id"
+  end
+
+  add_foreign_key "posts", "posts", column: "replied_post_id"
+  add_foreign_key "posts", "users"
 end

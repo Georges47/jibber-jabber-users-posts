@@ -30,6 +30,7 @@ RSpec.describe "/posts", type: :request do
     it "renders a successful response" do
       Post.create! valid_attributes
       get posts_url, headers: valid_headers, as: :json
+      puts response
       expect(response).to be_successful
     end
   end
