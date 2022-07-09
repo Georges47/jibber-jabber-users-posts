@@ -8,11 +8,11 @@ class PostsController < ApplicationController
 
     posts = []
 
-    @posts.each do |post|
+    @posts.newest_first.each do |post|
       user = User.find_by_keycloak_id(post.user.keycloak_id)
       posts << {
         id: post.id,
-        text: post.content,
+        text: post.deleted ? '' : post.content,
         user: {
           id: user.keycloak_id,
           displayName: user.display_name,
@@ -27,10 +27,10 @@ class PostsController < ApplicationController
 
   # GET /posts/1
   def show
-    replies = Post.where(replied_post_id: params['id']).map do |post|
+    replies = Post.oldest_first.where(replied_post_id: params['id']).map do |post|
       {
         id: post.id,
-        text: post.content,
+        text: post.deleted ? '' : post.content,
         user: {
           id: post.user.keycloak_id,
           displayName: post.user.display_name,
@@ -42,7 +42,7 @@ class PostsController < ApplicationController
 
     post = {
       id: @post.id,
-      text: @post.content,
+      text: @post.deleted ? '' : @post.content,
       user: {
         id: @post.user.keycloak_id,
         displayName: @post.user.display_name,
@@ -108,7 +108,7 @@ class PostsController < ApplicationController
     )
 
     if @post.save
-      render json: @post, status: :created#, location: @post
+      render json: @post, status: :created
     else
       render json: @post.errors, status: :unprocessable_entity
     end
@@ -125,7 +125,13 @@ class PostsController < ApplicationController
 
   # DELETE /posts/1
   def destroy
-    @post.destroy
+    decoded_token = @decoded_token[0]
+    user_keycloak_id = decoded_token['sub']
+
+    if @post.user.keycloak_id == user_keycloak_id
+      @post.deleted = true
+      @post.save
+    end
   end
 
   private

@@ -4,5 +4,6 @@ Rails.application.routes.draw do
   get '/:id', to: 'posts#show'
   post '/', to: 'posts#create'
   post '/:id/reply', to: 'posts#reply'
+  delete '/:id', to: 'posts#destroy'
 
 end
