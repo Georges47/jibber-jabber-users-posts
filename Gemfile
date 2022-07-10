@@ -39,6 +39,8 @@ gem "rack-cors"
 # Ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT) standard
 gem 'jwt'
 
+gem 'rswag'
+
 gem 'ddtrace', require: 'ddtrace/auto_instrument'
 
 group :development, :test do
