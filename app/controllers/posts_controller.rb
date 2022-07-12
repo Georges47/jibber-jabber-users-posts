@@ -59,18 +59,7 @@ class PostsController < ApplicationController
   def create
     decoded_token = @decoded_token[0]
     user_keycloak_id = decoded_token['sub']
-    display_name = decoded_token['display_name']
-    username = decoded_token['preferred_username']
-
-    if User.exists?(keycloak_id: user_keycloak_id)
-      user = User.find_by_keycloak_id(user_keycloak_id)
-    else
-      user = User.create(
-        display_name: display_name,
-        keycloak_id: user_keycloak_id,
-        username: username,
-      )
-    end
+    user = User.find_by_keycloak_id(user_keycloak_id)
 
     @post = Post.new(
       content: params['text'],
@@ -78,29 +67,18 @@ class PostsController < ApplicationController
     )
 
     if @post.save
-      render json: @post, status: :created#, location: @post
+      render json: @post, status: :created
     else
       render json: @post.errors, status: :unprocessable_entity
     end
   end
 
   def reply
-    original_post_id = params['id']
     decoded_token = @decoded_token[0]
     user_keycloak_id = decoded_token['sub']
-    display_name = decoded_token['display_name']
-    username = decoded_token['preferred_username']
+    user = User.find_by_keycloak_id(user_keycloak_id)
 
-    if User.exists?(keycloak_id: user_keycloak_id)
-      user = User.find_by_keycloak_id(user_keycloak_id)
-    else
-      user = User.create(
-        display_name: display_name,
-        keycloak_id: user_keycloak_id,
-        username: username,
-        )
-    end
-
+    original_post_id = params['id']
     @post = Post.new(
       content: params['text'],
       user: user,
@@ -132,6 +110,32 @@ class PostsController < ApplicationController
       @post.deleted = true
       @post.save
     end
+  end
+
+  def user_posts
+    user_keycloak_id = params['id']
+    user = User.find_by_keycloak_id(user_keycloak_id)
+
+    posts = []
+    @posts = Post
+               .where(user_id: user.id)
+               .where(replied_post_id: nil)
+               .newest_first
+
+    @posts.each do |post|
+      posts << {
+        id: post.id,
+        text: post.deleted ? '' : post.content,
+        user: {
+          id: user.keycloak_id,
+          displayName: user.display_name,
+          username: user.username,
+          avatar: user.avatar
+        }
+      }
+    end
+
+    render json: posts
   end
 
   private
