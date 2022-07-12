@@ -7,7 +7,7 @@ RSpec.describe 'users', type: :request do
     parameter name: 'id', in: :path, type: :string, description: 'id'
 
     get('show user') do
-      response(200, 'successful') do
+      response(401, 'successful') do
         let(:id) { '123' }
 
         after do |example|
@@ -25,7 +25,7 @@ RSpec.describe 'users', type: :request do
   path '/users' do
 
     post('check_user user') do
-      response(200, 'successful') do
+      response(401, 'successful') do
 
         after do |example|
           example.metadata[:response][:content] = {

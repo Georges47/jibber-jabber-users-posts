@@ -5,7 +5,7 @@ RSpec.describe 'posts', type: :request do
   path '/' do
 
     get('list posts') do
-      response(200, 'successful') do
+      response(401, 'successful') do
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -19,7 +19,7 @@ RSpec.describe 'posts', type: :request do
     end
 
     post('create post') do
-      response(200, 'successful') do
+      response(401, 'successful') do
 
         after do |example|
           example.metadata[:response][:content] = {
@@ -38,7 +38,7 @@ RSpec.describe 'posts', type: :request do
     parameter name: 'id', in: :path, type: :string, description: 'id'
 
     get('show post') do
-      response(200, 'successful') do
+      response(401, 'successful') do
         let(:id) { '123' }
 
         after do |example|
@@ -53,7 +53,7 @@ RSpec.describe 'posts', type: :request do
     end
 
     delete('delete post') do
-      response(200, 'successful') do
+      response(401, 'successful') do
         let(:id) { '123' }
 
         after do |example|
@@ -73,7 +73,7 @@ RSpec.describe 'posts', type: :request do
     parameter name: 'id', in: :path, type: :string, description: 'id'
 
     get('user_posts post') do
-      response(200, 'successful') do
+      response(401, 'successful') do
         let(:id) { '123' }
 
         after do |example|
@@ -93,7 +93,7 @@ RSpec.describe 'posts', type: :request do
     parameter name: 'id', in: :path, type: :string, description: 'id'
 
     post('reply post') do
-      response(200, 'successful') do
+      response(401, 'successful') do
         let(:id) { '123' }
 
         after do |example|
