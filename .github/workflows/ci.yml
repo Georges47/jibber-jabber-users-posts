@@ -19,8 +19,8 @@ jobs:
         image: postgres:10.8
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: jj_users_posts_test
+          POSTGRES_PASSWORD: ""
+          POSTGRES_DB: postgres
         ports:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
@@ -38,13 +38,11 @@ jobs:
 
       - name: Setup database and run tests
         env:
-#          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          POSTGRES_HOST: 127.0.0.1
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-#          PGDB: jj_users_posts_test
+          PGHOST: postgres
+          PGUSER: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
         run: |
+          cp config/database.github.yml config/database.yml
           bin/rails db:create db:schema:load
           bundle exec rspec
