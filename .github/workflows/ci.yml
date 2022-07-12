@@ -38,7 +38,7 @@ jobs:
 
       - name: Setup database and run tests
         env:
-          POSTGRES_HOST: posts_db
+#          POSTGRES_HOST: posts_db
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 #          PGDB: jj_users_posts_test
