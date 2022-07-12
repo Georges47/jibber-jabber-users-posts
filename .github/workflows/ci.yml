@@ -38,7 +38,8 @@ jobs:
 
       - name: Setup database and run tests
         env:
-#          POSTGRES_HOST: posts_db
+#          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          POSTGRES_HOST: 127.0.0.1
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 #          PGDB: jj_users_posts_test
