@@ -1,124 +1,90 @@
-require 'rails_helper'
+require 'swagger_helper'
 
-RSpec.describe "/posts", type: :request do
-  # This should return the minimal set of attributes required to create a valid
-  # Post. As you add validations to Post, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) {
-    {
-      creator_id: '123',
-      content: 'content'
-    }
-  }
+RSpec.describe 'posts', type: :request do
 
-  let(:invalid_attributes) {
-    {
-      creator_id: '',
-      content: ''
-    }
-  }
+  path '/' do
 
-  # This should return the minimal set of values that should be in the headers
-  # in order to pass any filters (e.g. authentication) defined in
-  # PostsController, or in your router and rack
-  # middleware. Be sure to keep this updated too.
-  let(:valid_headers) {
-    {}
-  }
+    get('list posts') do
+      response(200, 'successful') do
 
-  describe "GET /index" do
-    it "renders a successful response" do
-      Post.create! valid_attributes
-      get posts_url, headers: valid_headers, as: :json
-      puts response
-      expect(response).to be_successful
-    end
-  end
-
-  describe "GET /show" do
-    it "renders a successful response" do
-      post = Post.create! valid_attributes
-      get post_url(post), as: :json
-      expect(response).to be_successful
-    end
-  end
-
-  describe "POST /create" do
-    context "with valid parameters" do
-      it "creates a new Post" do
-        expect {
-          post posts_url,
-               params: { post: valid_attributes }, headers: valid_headers, as: :json
-        }.to change(Post, :count).by(1)
-      end
-
-      it "renders a JSON response with the new post" do
-        post posts_url,
-             params: { post: valid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:created)
-        expect(response.content_type).to match(a_string_including("application/json"))
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
       end
     end
 
-    context "with invalid parameters" do
-      it "does not create a new Post" do
-        expect {
-          post posts_url,
-               params: { post: invalid_attributes }, as: :json
-        }.to change(Post, :count).by(0)
-      end
+    post('create post') do
+      response(200, 'successful') do
 
-      it "renders a JSON response with errors for the new post" do
-        post posts_url,
-             params: { post: invalid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to match(a_string_including("application/json"))
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
       end
     end
   end
 
-  describe "PATCH /update" do
-    context "with valid parameters" do
-      let(:new_attributes) {
-        {
-          creator_id: '123',
-          content: 'new content'
-        }
-      }
+  path '/{id}' do
+    # You'll want to customize the parameter types...
+    parameter name: 'id', in: :path, type: :string, description: 'id'
 
-      it "updates the requested post" do
-        post = Post.create! valid_attributes
-        patch post_url(post),
-              params: { post: new_attributes }, headers: valid_headers, as: :json
-        expect { post.reload }.to change(post, :content)
-      end
+    get('show post') do
+      response(200, 'successful') do
+        let(:id) { '123' }
 
-      it "renders a JSON response with the post" do
-        post = Post.create! valid_attributes
-        patch post_url(post),
-              params: { post: new_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:ok)
-        expect(response.content_type).to match(a_string_including("application/json"))
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
       end
     end
 
-    context "with invalid parameters" do
-      it "renders a JSON response with errors for the post" do
-        post = Post.create! valid_attributes
-        patch post_url(post),
-              params: { post: invalid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to match(a_string_including("application/json"))
+    delete('delete post') do
+      response(200, 'successful') do
+        let(:id) { '123' }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
       end
     end
   end
 
-  describe "DELETE /destroy" do
-    it "destroys the requested post" do
-      post = Post.create! valid_attributes
-      expect {
-        delete post_url(post), headers: valid_headers, as: :json
-      }.to change(Post, :count).by(-1)
+  path '/{id}/reply' do
+    # You'll want to customize the parameter types...
+    parameter name: 'id', in: :path, type: :string, description: 'id'
+
+    post('reply post') do
+      response(200, 'successful') do
+        let(:id) { '123' }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
     end
   end
 end
