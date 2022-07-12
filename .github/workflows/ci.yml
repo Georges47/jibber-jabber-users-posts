@@ -19,8 +19,8 @@ jobs:
         image: postgres:10.8
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ""
-          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: jj_users_posts_test
         ports:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
@@ -38,8 +38,10 @@ jobs:
 
       - name: Setup database and run tests
         env:
-          PGHOST: postgres
-          PGUSER: postgres
+          POSTGRES_HOST: posts_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+#          PGDB: jj_users_posts_test
           PGPORT: ${{ job.services.postgres.ports[5432] }}
           RAILS_ENV: test
         run: |
