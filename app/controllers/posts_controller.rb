@@ -130,7 +130,8 @@ class PostsController < ApplicationController
           id: user.keycloak_id,
           displayName: user.display_name,
           username: user.username,
-          avatar: user.avatar
+          avatar: user.avatar,
+          bio: user.bio
         }
       }
     end
