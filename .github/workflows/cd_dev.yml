@@ -1,0 +1,29 @@
+name: CD - Dev
+
+on:
+  workflow_run:
+    workflows: [ "CI" ]
+    branches: [ dev ]
+    types:
+      - completed
+
+jobs:
+  cd:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: dev
+      - name: Docker login
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build
+        run: docker build -t jibber-jabber-posts-dev .
+      - name: Tags
+        run: |
+          docker tag jibber-jabber-posts-dev ${{ secrets.DOCKER_USER }}/jibber-jabber-posts-dev:${{ github.sha }}
+          docker tag jibber-jabber-posts-dev ${{ secrets.DOCKER_USER }}/jibber-jabber-posts-dev:latest
+      - name: Push
+        run: |
+          docker push ${{ secrets.DOCKER_USER }}/jibber-jabber-posts-dev:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USER }}/jibber-jabber-posts-dev:latest
