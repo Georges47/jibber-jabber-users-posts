@@ -20,4 +20,5 @@ COPY . /posts/
 
 ENTRYPOINT []
 
-EXPOSE 8081
+#EXPOSE 8081
+#RUN rm -f tmp/pids/server.pid && rails db:create db:migrate && rails s -p 8081 -b '0.0.0.0'
