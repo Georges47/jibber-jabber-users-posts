@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user
+  before_action :authenticate_user, except: :test_cd
   before_action :set_post, only: %i[ show update destroy ]
 
   # GET /posts
@@ -137,6 +137,10 @@ class PostsController < ApplicationController
     end
 
     render json: posts
+  end
+
+  def test_cd
+    render json: { message: 'It worked!' }
   end
 
   private

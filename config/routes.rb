@@ -12,4 +12,5 @@ Rails.application.routes.draw do
   get '/users/:id', to: 'users#show'
   post '/users', to: 'users#check_user'
 
+  get 'test_cd', to: 'posts#test_cd'
 end

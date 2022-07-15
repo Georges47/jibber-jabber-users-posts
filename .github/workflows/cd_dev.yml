@@ -61,4 +61,4 @@ jobs:
 
       - name: Start the server
         if: ${{ always() }}
-        run: ssh dev 'sudo docker-compose up'
+        run: ssh dev 'sudo docker-compose up -d'
