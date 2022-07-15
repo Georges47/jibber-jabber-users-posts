@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   mount Rswag::Ui::Engine => '/rswag/api-docs', via: [:get]
   mount Rswag::Api::Engine => '/rswag/api-docs', via: [:get]
 
-  get '/', to: 'posts#index'
+  get '/all', to: 'posts#index'
   get '/:id', to: 'posts#show'
   get '/users/:id/posts', to: 'posts#user_posts'
   post '/', to: 'posts#create'
