@@ -22,9 +22,7 @@ class PostsController < ApplicationController
       }
     end
 
-    puts "TEST MESSAGE ON INDEX ACTION OF POSTS CONTROLLER!!!"
-
-    render json: posts
+    render json: posts, message: 'ok'
   end
 
   # GET /posts/1

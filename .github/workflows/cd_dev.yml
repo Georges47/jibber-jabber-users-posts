@@ -51,14 +51,14 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_DEV_HOST }}
 
       - name: Stop the server
-        run: ssh dev 'docker-compose stop'
+        run: ssh dev 'sudo docker-compose stop'
 
       - name: Remove container and image
-        run: ssh dev 'docker container rm posts && docker image rm georgesstefan/jibber-jabber-posts-dev'
+        run: ssh dev 'sudo docker container rm posts && sudo docker image rm georgesstefan/jibber-jabber-posts-dev'
 
       - name: Pull new image
-        run: ssh dev 'docker pull ${{ secrets.DOCKER_USER }}/jibber-jabber-posts-dev:${{ github.sha }}'
+        run: ssh dev 'sudo docker pull ${{ secrets.DOCKER_USER }}/jibber-jabber-posts-dev:${{ github.sha }}'
 
       - name: Start the server
         if: ${{ always() }}
-        run: ssh dev 'docker-compose up'
+        run: ssh dev 'sudo docker-compose up'
