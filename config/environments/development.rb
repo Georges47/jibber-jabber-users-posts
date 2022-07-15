@@ -65,4 +65,5 @@ Rails.application.configure do
 
   config.hosts << "jibber-jabber.brazilsouth.cloudapp.azure.com"
   config.hosts << "www.example.com"
+  config.hosts << "jibber-jab.brazilsouth.cloudapp.azure.com"
 end
