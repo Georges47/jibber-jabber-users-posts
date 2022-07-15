@@ -9,6 +9,7 @@ on:
 
 jobs:
   cd:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-20.04
 
     steps:
@@ -54,6 +55,9 @@ jobs:
 
       - name: Remove container and image
         run: ssh dev 'docker container rm posts && docker image rm georgesstefan/jibber-jabber-posts-dev'
+
+      - name: Pull new image
+        run: ssh dev 'docker pull ${{ secrets.DOCKER_USER }}/jibber-jabber-posts-dev:${{ github.sha }}'
 
       - name: Start the server
         if: ${{ always() }}

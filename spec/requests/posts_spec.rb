@@ -2,8 +2,7 @@ require 'swagger_helper'
 
 RSpec.describe 'posts', type: :request do
 
-  path '/' do
-
+  path '/all' do
     get('list posts') do
       response(401, 'successful') do
 
@@ -17,7 +16,9 @@ RSpec.describe 'posts', type: :request do
         run_test!
       end
     end
+  end
 
+  path '/' do
     post('create post') do
       response(401, 'successful') do
 

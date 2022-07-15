@@ -85,4 +85,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.hosts << "jibber-jabber.brazilsouth.cloudapp.azure.com"
+  config.hosts << "www.example.com"
 end
