@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  mount Rswag::Ui::Engine => '/rswag/api-docs', via: [:get]
-  mount Rswag::Api::Engine => '/rswag/api-docs', via: [:get]
+  mount Rswag::Ui::Engine => '/api/posts/rswag/api-docs', via: [:get]
+  mount Rswag::Api::Engine => '/api/posts/rswag/api-docs', via: [:get]
 
   get '/all', to: 'posts#index'
   get '/:id', to: 'posts#show'
