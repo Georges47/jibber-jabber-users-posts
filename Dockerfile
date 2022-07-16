@@ -22,7 +22,7 @@ ENV POSTGRES_HOST ${POSTS_DB_HOST}
 ENV POSTGRES_USER ${POSTS_DB_USER}
 ENV POSTGRES_PASSWORD ${POSTS_DB_PASSWORD}
 
-RUN rails db:create db:migrate
+RUN bin/rails db:create db:migrate
 
 RUN rm -f tmp/pids/server.pid
 
