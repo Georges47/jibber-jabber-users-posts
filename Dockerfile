@@ -22,13 +22,12 @@ COPY . /posts/
 #ENV POSTGRES_USER ${POSTS_DB_USER}
 #ENV POSTGRES_PASSWORD ${POSTS_DB_PASSWORD}
 
-RUN #rm -f tmp/pids/server.pid
 
 #RUN rails db:create rails db:migrate
 
-COPY entrypoint.sh /posts/
-RUN chmod +x /posts/entrypoint.sh
-ENTRYPOINT ["/posts/entrypoint.sh"]
+COPY entrypoint.sh /usr/bin/
+RUN chmod +x /usr/bin/entrypoint.sh
+ENTRYPOINT ["entrypoint.sh"]
 
 CMD ["rails", "server", "-p", "8080", "-b", "0.0.0.0"]
 
