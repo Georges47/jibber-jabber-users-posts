@@ -26,7 +26,7 @@ RUN #rm -f tmp/pids/server.pid
 
 #RUN rails db:create rails db:migrate
 
-COPY entrypoint.sh /posts/
+#COPY entrypoint.sh /posts/
 RUN chmod +x /posts/entrypoint.sh
 ENTRYPOINT ["/posts/entrypoint.sh"]
 
