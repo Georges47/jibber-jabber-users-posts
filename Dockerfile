@@ -26,9 +26,9 @@ RUN #rm -f tmp/pids/server.pid
 
 #RUN rails db:create rails db:migrate
 
-COPY entrypoint.sh /usr/bin/
-RUN chmod +x /usr/bin/entrypoint.sh
-ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+#COPY entrypoint.sh /posts/
+RUN chmod +x /posts/entrypoint.sh
+ENTRYPOINT ["/posts/entrypoint.sh"]
 
 CMD ["rails", "server", "-p", "8080", "-b", "0.0.0.0"]
 
