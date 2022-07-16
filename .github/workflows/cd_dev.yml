@@ -29,6 +29,9 @@ jobs:
           POSTS_DB_HOST: ${{ secrets.POSTS_DB_HOST }}
           POSTS_DB_USER: ${{ secrets.POSTS_DB_USER }}
           POSTS_DB_PASSWORD: ${{ secrets.POSTS_DB_PASSWORD }}
+          PGHOST: postgres
+          PGUSER: postgres
+          PGPORT: ${{ job.services.postgres.ports[5432] }}
 
       - name: Tags
         run: |
