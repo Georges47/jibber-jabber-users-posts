@@ -34,9 +34,10 @@ jobs:
       - name: Build
         run: docker build -t jibber-jabber-posts-prod .
         env:
-          POSTS_DB_HOST: localhost #${{ secrets.POSTS_DB_HOST }}
+          POSTS_DB_HOST: postgres #${{ secrets.POSTS_DB_HOST }}
           POSTS_DB_USER: postgres #${{ secrets.POSTS_DB_USER }}
-          PGHOST: localhost
+          POSTS_DB_PASSWORD: ""
+          PGHOST: postgres
           PGUSER: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
 
