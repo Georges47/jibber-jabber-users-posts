@@ -19,18 +19,11 @@ RUN bundle install
 COPY . /posts/
 
 ENV POSTGRES_HOST ${POSTS_DB_HOST}
-RUN echo $POSTGRES_HOST
-
 ENV POSTGRES_USER ${POSTS_DB_USER}
-RUN echo $POSTGRES_USER
-
 ENV POSTGRES_PASSWORD ${POSTS_DB_PASSWORD}
-RUN echo $POSTGRES_PASSWORD
-
-RUN rails db:create
-
-RUN rails db:migrate
 
 RUN rm -f tmp/pids/server.pid
 
-ENTRYPOINT ["rails", "server", "-p", "8080", "-b", "0.0.0.0"]
+#RUN rails db:create rails db:migrate
+
+ENTRYPOINT ["rails", "db:create", "rails", "db:migrate", "&&","rails", "server", "-p", "8080", "-b", "0.0.0.0"]
