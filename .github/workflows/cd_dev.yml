@@ -19,8 +19,8 @@ jobs:
         image: postgres:10.8
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ""
-          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: ${{ secrets.POSTS_DB_PASSWORD }}
+          POSTGRES_DB: jj_users_posts_development
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -34,13 +34,10 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build
-        run: |
-          cp config/database.github.yml config/database.yml
-          bin/rails db:create
-          docker build -t jibber-jabber-posts-dev .
+        run: docker build -t jibber-jabber-posts-dev .
         env:
-          POSTS_DB_HOST: ${{ secrets.POSTS_DB_HOST }}
-          POSTS_DB_USER: ${{ secrets.POSTS_DB_USER }}
+          POSTS_DB_HOST: postgres #${{ secrets.POSTS_DB_HOST }}
+          POSTS_DB_USER: postgres #${{ secrets.POSTS_DB_USER }}
           PGHOST: postgres
           PGUSER: postgres
           PGPORT: ${{ job.services.postgres.ports[5432] }}
