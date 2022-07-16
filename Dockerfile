@@ -18,6 +18,8 @@ RUN bundle install
 
 COPY . /posts/
 
-RUN rm -f tmp/pids/server.pid && rails db:create db:migrate
+RUN rails db:create db:migrate
+
+RUN rm -f tmp/pids/server.pid
 
 ENTRYPOINT ["rails", "server", "-p", "8080", "-b", "0.0.0.0"]
