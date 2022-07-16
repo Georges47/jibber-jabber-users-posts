@@ -18,7 +18,6 @@ RUN bundle install
 
 COPY . /posts/
 
-ENTRYPOINT []
+RUN rm -f tmp/pids/server.pid && rails db:create db:migrate
 
-#EXPOSE 8081
-#RUN rm -f tmp/pids/server.pid && rails db:create db:migrate && rails s -p 8081 -b '0.0.0.0'
+ENTRYPOINT ["rails", "server", "-p", "8080", "-b", "0.0.0.0"]
