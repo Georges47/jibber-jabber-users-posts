@@ -26,4 +26,8 @@ RUN rm -f tmp/pids/server.pid
 
 #RUN rails db:create rails db:migrate
 
-ENTRYPOINT ["rails", "db:create", "rails", "db:migrate", "&&","rails", "server", "-p", "8080", "-b", "0.0.0.0"]
+RUN rails db:create
+RUN rails db:migrate
+
+
+#ENTRYPOINT ["rails", "db:create", "rails", "db:migrate", "&&","rails", "server", "-p", "8080", "-b", "0.0.0.0"]
