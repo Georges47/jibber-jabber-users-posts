@@ -11,6 +11,8 @@ jobs:
   cd:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-20.04
+    container:
+      image: ruby:3.0.4
 
     services:
       postgres:
