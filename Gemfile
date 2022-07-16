@@ -41,7 +41,7 @@ gem 'jwt'
 
 gem 'rswag'
 
-gem 'ddtrace', require: 'ddtrace/auto_instrument'
+# gem 'ddtrace', require: 'ddtrace/auto_instrument'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
