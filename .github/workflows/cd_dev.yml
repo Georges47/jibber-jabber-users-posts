@@ -23,6 +23,7 @@ jobs:
       - name: Build
         run: |
           cp config/database.github.yml config/database.yml
+          bin/rails db:create
           docker build -t jibber-jabber-posts-dev .
         env:
           POSTS_DB_HOST: ${{ secrets.POSTS_DB_HOST }}
