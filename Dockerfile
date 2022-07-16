@@ -28,7 +28,7 @@ RUN #rm -f tmp/pids/server.pid
 
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 
 CMD ["rails", "server", "-p", "8080", "-b", "0.0.0.0"]
 
