@@ -22,6 +22,10 @@ jobs:
 
       - name: Build
         run: docker build -t jibber-jabber-posts-dev .
+        env:
+          POSTS_DB_HOST: ${{ secrets.POSTS_DB_HOST }}
+          POSTS_DB_USER: ${{ secrets.POSTS_DB_USER }}
+          POSTS_DB_PASSWORD: ${{ secrets.POSTS_DB_PASSWORD }}
 
       - name: Tags
         run: |
