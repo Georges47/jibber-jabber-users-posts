@@ -25,12 +25,12 @@ jobs:
       - name: Tags
         run: |
           docker tag jibber-jabber-posts ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.sha }}
-          docker tag jibber-jabber-posts ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.ref_name == 'master' && 'prod' || 'dev' }}
+          docker tag jibber-jabber-posts ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.ref_name == 'main' && 'prod' || 'dev' }}
 
       - name: Push
         run: |
           docker push ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.sha }}
-          docker push ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.ref_name == 'master' && 'prod' || 'dev' }}
+          docker push ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.ref_name == 'main' && 'prod' || 'dev' }}
 
       - name: Configure SSH
         run: |
@@ -45,9 +45,9 @@ jobs:
             StrictHostKeyChecking no
           END
         env:
-          SSH_USER: ${{ github.ref_name == 'master' && secrets.SSH_PROD_USER || secrets.SSH_DEV_USER }}
-          SSH_KEY: ${{ github.ref_name == 'master' && secrets.SSH_PROD_PRIVATE_KEY || secrets.SSH_DEV_PRIVATE_KEY }}
-          SSH_HOST: ${{ github.ref_name == 'master' && secrets.SSH_PROD_HOST || secrets.SSH_DEV_HOST }}
+          SSH_USER: ${{ github.ref_name == 'main' && secrets.SSH_PROD_USER || secrets.SSH_DEV_USER }}
+          SSH_KEY: ${{ github.ref_name == 'main' && secrets.SSH_PROD_PRIVATE_KEY || secrets.SSH_DEV_PRIVATE_KEY }}
+          SSH_HOST: ${{ github.ref_name == 'main' && secrets.SSH_PROD_HOST || secrets.SSH_DEV_HOST }}
 
       - name: Stop the server
         run: ssh vm 'docker-compose stop'
@@ -56,7 +56,7 @@ jobs:
         run: ssh vm 'docker container rm posts && docker image rm georgesstefan/jibber-jabber-posts'
 
       - name: Pull new image
-        run: ssh vm 'docker pull ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.ref_name == 'master' && 'prod' || 'dev' }}'
+        run: ssh vm 'docker pull ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.ref_name == 'main' && 'prod' || 'dev' }}'
 
       - name: Start the server
         if: ${{ always() }}
