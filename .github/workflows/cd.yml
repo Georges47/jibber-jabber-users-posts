@@ -1,0 +1,60 @@
+name: CD
+
+on:
+  push:
+    branches: [ dev, main ]
+
+jobs:
+  cd:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Docker login
+        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build
+        run: docker build -t jibber-jabber-posts .
+
+      - name: Tags
+        run: |
+          docker tag jibber-jabber-posts ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.sha }}
+          docker tag jibber-jabber-posts ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.ref_name == 'master' && 'prod' || 'dev' }}
+
+      - name: Push
+        run: |
+          docker push ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.ref_name == 'master' && 'prod' || 'dev' }}
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/vm.key
+          chmod 600 ~/.ssh/vm.key
+          cat >>~/.ssh/config <<END
+          Host vm
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/vm.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ github.ref_name == 'master' && secrets.SSH_PROD_USER || secrets.SSH_DEV_USER }}
+          SSH_KEY: ${{ github.ref_name == 'master' && secrets.SSH_PROD_PRIVATE_KEY || secrets.SSH_DEV_PRIVATE_KEY }}
+          SSH_HOST: ${{ github.ref_name == 'master' && secrets.SSH_PROD_HOST || secrets.SSH_DEV_HOST }}
+
+      - name: Stop the server
+        run: ssh vm 'docker-compose stop'
+
+      - name: Remove container and image
+        run: ssh vm 'docker container rm posts && docker image rm georgesstefan/jibber-jabber-posts'
+
+      - name: Pull new image
+        run: ssh vm 'docker pull ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.ref_name == 'master' && 'prod' || 'dev' }}'
+
+      - name: Start the server
+        if: ${{ always() }}
+        run: ssh vm 'docker-compose up -d > /dev/null 2>&1'
