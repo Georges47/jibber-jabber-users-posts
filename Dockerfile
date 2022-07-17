@@ -9,10 +9,10 @@ RUN apk add --update --no-cache --virtual run-dependencies \
 		tzdata \
 		libpq \
 		&& rm -rf /var/cache/apk/*
-		
+
 WORKDIR /posts
 
-COPY Gemfile Gemfile.lock /posts/ 
+COPY Gemfile Gemfile.lock /posts/
 
 RUN bundle install
 
