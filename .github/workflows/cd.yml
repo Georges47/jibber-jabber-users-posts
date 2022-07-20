@@ -53,7 +53,7 @@ jobs:
         run: ssh vm 'docker-compose stop'
 
       - name: Remove container and image
-        run: ssh vm 'docker container rm posts && docker image rm georgesstefan/jibber-jabber-posts'
+        run: ssh vm 'docker container rm posts && docker image rm georgesstefan/jibber-jabber-:${{ github.ref_name == 'main' && 'prod' || 'dev' }}'
 
       - name: Pull new image
         run: ssh vm 'docker pull ${{ secrets.DOCKER_USER }}/jibber-jabber-posts:${{ github.ref_name == 'main' && 'prod' || 'dev' }}'
